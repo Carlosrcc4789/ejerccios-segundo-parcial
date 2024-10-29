@@ -1,41 +1,41 @@
 package modelo;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import  java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAO {
     private Connection conexion;
-    public UsuarioDAO(Connection conexion){
-        List<Usuario> usuarios=new ArrayList<>();
-        String sql ="SELECT id, nombre,email FROM usuarios";
-        try (PreparedStatement statement = conexion.prepareStatement(sql));
-        ResultSet resultSet = statement.executeQuery();{
-            while (resultSet.next()){
+    public UsuarioDAO(Connection conexion) {
+        this.conexion = conexion;
+    }
+        public List<Usuario> obtenerUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT id, nombre, email FROM usuarios";
+        try (PreparedStatement statement = conexion.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
                 int id = resultSet.getInt("id");
-                String nombre = resultSet.getString(nombre);
+                String nombre = resultSet.getString("nombre");
                 String email = resultSet.getString("email");
-                usuario usuario = new Usuario(id,nombre,email);
-                usuario.add(usuario);
-
+                Usuario usuario = new Usuario(id, nombre, email);
+                usuarios.add(usuario);
             }
-        }catch (SQLException e){
-            throw new RuntimeException("Error al obtener los usurarios"+e.getMessage)
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return usuarios;
     }
-    public void agregarUsuario(String nombre,String email)throws  SQLException{
-        String sql ="insert into usurios (nombre,email)VALUES(?,?)";
-        try(preparedStratement stmt = conexion.prepareSTATEMENT(SQL)){
-            stmt.setString(1,nombre);
-            stmt.setString(2,email);
-            stm.executeUPdate();
-        }cath(SQLException e){
-            thow new runtimeEXception("error al obtenerlos usuarios"+e.getMessage(),e);
+    public void agregarUsuario(String nombre, String email) throws SQLException {
+        String sql = "INSERT INTO usuarios(nombre, email) VALUES(?,?)";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, nombre);
+            stmt.setString(2, email);
+            stmt.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException("Error al obtener los uuarios"+e.getMessage(),e);
         }
     }
+
 
 }
